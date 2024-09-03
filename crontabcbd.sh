@@ -40,10 +40,10 @@ else
     (crontab -l | grep -F "pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
     (crontab -l | grep -F "pgrep -x \"hysteria-server\" > /dev/null || ${CRON_HYSTERIA}") || (crontab -l; echo "*/12 * * * * pgrep -x \"hysteria-server\" > /dev/null || ${CRON_HYSTERIA}") | crontab -
   elif [ -f "${WORKDIR}/start.sh" ]; then
-    echo "添加 nezha and socks5 的 crontab 重启任务"
+    echo "添加 nezha探针和面板和socks5 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") | crontab -
-    (crontab -l | echo "*6 * * * * pgrep -x "dashboard" > /dev/null || nohup /home/${USER}/.nezha-dashboard/start.sh >/dev/null 2>&1 &") | crontab -
-    (crontab -l | echo "*/6 * * * * pgrep -x "s5" > /dev/null || nohup /home/${USER}/.s5/s5 -c /home/${USER}/.s5/config.json >/dev/null 2>&1 &") | crontab -
+    (crontab -l | grep -F "pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") || (crontab -l; echo "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") | crontab -
+    (crontab -l | grep -F "pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
     (crontab -l | grep -F "pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") || (crontab -l; echo "*/6 * * * * pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") | crontab -
   elif [ -f "${FILE_PATH}/config.json" ]; then
     echo "添加 socks5 的 crontab 重启任务"
