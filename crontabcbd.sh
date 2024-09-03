@@ -1,8 +1,3 @@
-Crontab  哪吒保活脚本
-
-
-
-
 #!/bin/bash
 
 USER=$(whoami)
