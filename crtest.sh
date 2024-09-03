@@ -4,11 +4,13 @@ USER=$(whoami)
 USER_LOWER="${USER,,}"
 USER_HOME="/home/${USER_LOWER}"
 WORKDIR="${USER_HOME}/.nezha-agent"
+WORKBOARD="${USER_HOME}/.nezha-dashboard"
 FILE_PATH="${USER_HOME}/.s5"
 HYSTERIA_WORKDIR="${USER_HOME}/.hysteria"
 HYSTERIA_CONFIG="${HYSTERIA_WORKDIR}/config.yaml"  # Hysteria 配置文件路径
 CRON_S5="nohup ${FILE_PATH}/s5 -c ${FILE_PATH}/config.json >/dev/null 2>&1 &"
 CRON_NEZHA="nohup ${WORKDIR}/start.sh >/dev/null 2>&1 &"
+CRON_DASHBOARD="nohup ${WORKBOARD}/start.sh >/dev/null 2>&1 &"
 CRON_HYSTERIA="nohup ${HYSTERIA_WORKDIR}/hysteria-server -c $HYSTERIA_CONFIG >/dev/null 2>&1 &"  # Hysteria 启动命令
 PM2_PATH="${USER_HOME}/.npm-global/lib/node_modules/pm2/bin/pm2"
 CRON_JOB="*/12 * * * * $PM2_PATH resurrect >> ${USER_HOME}/pm2_resurrect.log 2>&1"
@@ -43,7 +45,7 @@ else
     echo "添加 nezha 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") | crontab -
     (crontab -l | grep -F "pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") || (crontab -l; echo "*/12 * * * * pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") | crontab -
-    (crontab -l | grep -F "pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") || (crontab -l; echo "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") | crontab -
+    (crontab -l | grep -F "pgrep -x \"nezha-dashboard\" > /dev/null || ${CRON_DASHBOARD}") || (crontab -l; echo "*/12 * * * * pgrep -x \"nezha-dashboard\" > /dev/null || ${CRON_DASHBOARD}") | crontab -
   elif [ -f "${FILE_PATH}/config.json" ]; then
     echo "添加 socks5 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_S5}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_S5}") | crontab -
