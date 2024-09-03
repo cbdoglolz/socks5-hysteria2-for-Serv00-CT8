@@ -1,3 +1,8 @@
+Crontab  哪吒保活脚本
+
+
+
+
 #!/bin/bash
 
 USER=$(whoami)
@@ -42,9 +47,9 @@ else
   elif [ -f "${WORKDIR}/start.sh" ]; then
     echo "添加 nezha and socks5 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_NEZHA}") | crontab -
-    (crontab -l; echo "*/12 * * * * pgrep -x "dashboard" > /dev/null || nohup /home/${USER}/.nezha-dashboard/start.sh >/dev/null 2>&1 &") | crontab -
-    (crontab -l; echo "*/12 * * * * pgrep -x "s5" > /dev/null || nohup /home/${USER}/.s5/s5 -c /home/${USER}/.s5/config.json >/dev/null 2>&1 &") | crontab -
-    (crontab -l | grep -F "pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") || (crontab -l; echo "*/12 * * * * pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") | crontab -
+    (crontab -l; echo "*6 * * * * pgrep -x "dashboard" > /dev/null || nohup /home/${USER}/.nezha-dashboard/start.sh >/dev/null 2>&1 &") | crontab -
+    (crontab -l; echo "*/6 * * * * pgrep -x "s5" > /dev/null || nohup /home/${USER}/.s5/s5 -c /home/${USER}/.s5/config.json >/dev/null 2>&1 &") | crontab -
+    (crontab -l | grep -F "pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") || (crontab -l; echo "*/6 * * * * pgrep -x \"nezha-agent\" > /dev/null || ${CRON_NEZHA}") | crontab -
   elif [ -f "${FILE_PATH}/config.json" ]; then
     echo "添加 socks5 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_S5}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_S5}") | crontab -
